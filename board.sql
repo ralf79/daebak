@@ -1,3 +1,7 @@
+create database testdb;
+CREATE USER daebak WITH PASSWORD '!dlwlgns00';
+GRANT ALL PRIVILEGES ON DATABASE testdb to daebak;
+
 DROP table board;
 CREATE TABLE board (
     id  SERIAL PRIMARY KEY,
@@ -11,7 +15,7 @@ CREATE TABLE board (
 );
 
 
-insert into board(title, content, author) values('aa','aa','aa');
+insert into board(title, content, author) values('This is Sample Title','At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culp orem ipsum dolor sit amet, consectetur adipiscing elit. Ut non libero magna. Sed et quam lacus. Fusce condimentum eleifend enim a feugiat. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut non libero consectetur adipiscing elit magna. Sed et quam lacus. Fusce condimentum eleifend enim a feugiat. Pellentesque viverra vehicula sem ut volutpat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut non libero magna. Sed et quam lacus.','daebak');
 
 --
 -- private Long id;
@@ -26,6 +30,7 @@ insert into board(title, content, author) values('aa','aa','aa');
 insert into board(title, content, author)
 select title, content, author from board;
 
+update board set title = title || '-' ||id, content = content || '=' || id;
 
 create table member (
   id serial primary key,
@@ -46,4 +51,3 @@ order by id desc limit 50 offset 102)
 ;
 
 
-update board set title = title || '-' ||id, content = content || '=' || id;
