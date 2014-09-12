@@ -47,3 +47,5 @@ order by id desc limit 50 offset 102)
 
 
 update board set title = title || '-' ||id, content = content || '=' || id;
+
+
