@@ -3,39 +3,28 @@ package com.daebak.board;
 import java.io.Serializable;
 
 /**
- * Created by system on 2014. 9. 5..
+ * Created by system on 2014. 9. 13..
  */
-public class Board implements Serializable {
-
-    private static final long serialVersionUID = -7788619177798333712L;
-
+public class Comments implements Serializable {
     private Integer id;
-    private String title;
+    private String idtree;
+    private Integer parent;
     private String content;
     private String author;
     private String cdate;
     private Integer likecnt;
     private Integer hatecnt;
-    private Integer viewcnt;
-    private String categories_name;
-    private Integer categories_id;
+    private Integer prevlevel;
+    private Integer nextlevel;
 
-    public Integer getCategories_id() {
-        return categories_id;
+
+    public String getIdtree() {
+        return idtree;
     }
 
-    public void setCategories_id(Integer categories_id) {
-        this.categories_id = categories_id;
+    public void setIdtree(String structure) {
+        this.idtree = structure;
     }
-
-    public String getCategories_name() {
-        return categories_name;
-    }
-
-    public void setCategories_name(String categories_name) {
-        this.categories_name = categories_name;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -44,12 +33,12 @@ public class Board implements Serializable {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public Integer getParent() {
+        return parent;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setParent(Integer parent) {
+        this.parent = parent;
     }
 
     public String getContent() {
@@ -92,12 +81,19 @@ public class Board implements Serializable {
         this.hatecnt = hatecnt;
     }
 
-    public Integer getViewcnt() {
-        return viewcnt;
+    public Integer getPrevlevel() {
+        return prevlevel;
     }
 
-    public void setViewcnt(Integer viewcnt) {
-        this.viewcnt = viewcnt;
+    public void setPrevlevel(Integer prevlevel) {
+        this.prevlevel = prevlevel;
     }
 
+    public Integer getNextlevel() {
+        return nextlevel;
+    }
+
+    public void setNextlevel(Integer nextlevel) {
+        this.nextlevel = nextlevel;
+    }
 }

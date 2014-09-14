@@ -29,17 +29,17 @@ public class BoardController {
 
     @RequestMapping(value = BoardRestURIConstants.LIST_URL, method = RequestMethod.GET)
     public @ResponseBody
-    Map<String,Object> listBoard(@RequestParam("draw") int draw,
+    Map<String,Object> listBoard(@PathVariable("categories_id") int categories_id,
+                                 @PathVariable("isall") int isall,
+                                 @RequestParam("draw") int draw,
                           @RequestParam("start") int start,
                           @RequestParam("length") int length,
                           ModelMap model) {
         log.info("--------- listBoard:" + draw + ":" + start + ":"+ length);
-        List<Board> items = boardJDBCTemplate.listBoard(draw,start,length);
+        List<Board> items = boardJDBCTemplate.listBoard(draw,start,length, categories_id,isall);
         log.info("-------> List<Board> length is " + items.size());
         Map<String, Object> result = new HashMap<String, Object>();
-//        "draw": 1,
-//                "recordsTotal": 57,
-//                "recordsFiltered": 57,
+
         Board totalRow = items.get(0);
         log.info(String.valueOf(totalRow.getId()));
         log.info(String.valueOf(totalRow.getTitle()));
@@ -53,6 +53,7 @@ public class BoardController {
             List<String> nitem = new ArrayList<String>();
             nitem.add(items.get(i).getId()+"");
             nitem.add("<a href='/#/board/view/"+items.get(i).getId()+"'>"+ items.get(i).getTitle().trim() + "</a>");
+            nitem.add(items.get(i).getCategories_name());
             nitem.add(items.get(i).getAuthor().trim());
             nitem.add(items.get(i).getCdate().trim());
             nitem.add(items.get(i).getViewcnt()+"");
@@ -66,12 +67,27 @@ public class BoardController {
 
     @RequestMapping(value = BoardRestURIConstants.GET_URL, method = RequestMethod.GET)
     public @ResponseBody
-    Board getBoard(@PathVariable("id") int id, ModelMap model) {
+    Map<String,Object> getBoard(@PathVariable("id") int id, ModelMap model) {
         log.info("------- getBoard(" + id + ")");
-//        return null;
+        Map<String, Object> result = new HashMap<String, Object>();
         Board t = boardJDBCTemplate.getBoard(id);
-        log.info(String.valueOf(t));
-        return t;
+        List<Comments> cl = boardJDBCTemplate.listComment(id);
+        result.put("board", t);
+        result.put("comments", cl);
+        log.info(String.valueOf(cl));
+        return result;
+    }
+
+    @RequestMapping(value = BoardRestURIConstants.INFO_URL, method = RequestMethod.GET)
+    public @ResponseBody
+    Map<String,Object> infoBoard(@PathVariable("id") int id, ModelMap model) {
+        log.info("------- infoBoard(" + id + ")");
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        List<Categories> cl = boardJDBCTemplate.listCategories(id);
+        result.put("categories", cl);
+        log.info(String.valueOf(cl));
+        return result;
     }
 
     @RequestMapping(value = BoardRestURIConstants.CREATE_URL, method = RequestMethod.POST)

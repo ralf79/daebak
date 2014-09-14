@@ -1,6 +1,7 @@
 package com.daebak.board;
 
 
+import com.daebak.DBUtil;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -23,7 +24,16 @@ public class BoardMapper implements RowMapper<Board> {
         vo.setLikecnt(resultSet.getInt("likecnt"));
         vo.setHatecnt(resultSet.getInt("hatecnt"));
         vo.setViewcnt(resultSet.getInt("viewcnt"));
+        if(DBUtil.doesColumnExist("categories_id", resultSet))
+            vo.setCategories_id(resultSet.getInt("categories_id"));
+        else
+            vo.setCategories_id(0);
+        if(DBUtil.doesColumnExist("categories_name", resultSet))
+            vo.setCategories_name(resultSet.getString("categories_name"));
+        else
+            vo.setCategories_name("");
         return vo;
 
     }
+
 }

@@ -18,6 +18,7 @@ angular.module('MyApp.board.ctrl',[])
     .controller('BoardViewCtrl', ['$location', '$scope', '$modal', '$boardService','$routeParams', function($location, $scope, $modal, $boardService,$routeParams) {
         $scope.$routeParams = $routeParams;
         $scope.board={};
+        $scope.board.commentsOption = {};
         $scope.board.id = $routeParams.id;
         console.log('$scope.detail : ' + $scope.board.id);
         var pp = $boardService.view([],'/'+$scope.board.id);
@@ -28,39 +29,28 @@ angular.module('MyApp.board.ctrl',[])
 
         pp.then(function(data) {
             console.log(data);
-            $scope.board.content = data.content;
-            $scope.board.title = data.title;
-            $scope.board.author = data.author;
-            $scope.board.cdate = data.cdate;
+            var detail = data.board;
+            $scope.board.content = detail.content;
+            $scope.board.title = detail.title;
+            $scope.board.author = detail.author;
+            $scope.board.cdate = detail.cdate;
+
+            $scope.board.commentsOption.data = data.comments;
+
             console.log($scope.board);
         });
     }])
     .controller('BoardListCtrl', ['$location', '$scope', '$modal', '$boardService', function($location, $scope, $modal, $boardService) {
         $scope.current_path = '#' + $location.url();
         $scope.editedItem = {};
-        var editDlg;
-        $scope.detail = function(id){
-            console.log('$scope.detail : ' + id);
-            var pp = $boardService.view([],'/'+id);
-            pp.then(function(data){
-                console.log(data);
-                $scope.editedItem.title = data.title;
-                $scope.editedItem.content = data.content;
-                $scope.editedItem.author = data.author;
-                editDlg = $dialogs.create(CONFIG.preparePartialTemplateUrl('board-view'), 'ModalInstanceCtrl', {editedItem:$scope.editedItem}, {key:false, back:'static'});
-                editDlg.result.then(function(editedItem){
-                    console.log('modal result is -------');
-                    console.log(editedItem);
-//                    if(!_.isUndefined(editedItem.modalcmd) && editedItem.modalcmd == 'delete'){
-//                        $scope.delete();
-//                    }else{
-//                        $scope.editedItem = editedItem;
-//                        $scope.save();
-//                    }
-                });
-
-            });
-        }
+        $scope.board_id = 1;
+        $scope.categoriesOption = {};
+        var ipromise = $boardService.boardInfo([], '/'+$scope.board_id);
+        ipromise.then(function(data){
+            $scope.categoriesOption.data = data.categories;
+        });
+//        $scope.tableOptions.categories_id = -1;
+//        $scope.tableOptions.isall = 1;
 
         $scope.tableOptions =
         { // here you can define a typical datatable settings from http://datatables.net/usage/options
@@ -74,8 +64,17 @@ angular.module('MyApp.board.ctrl',[])
                 "type":"GET"
             },
             "order": [
-                [1, "asc"]
-            ] // set first column as a default sort by asc
+                [1, "asc"] // set first column as a default sort by asc,
+            ],
+            "categories_id":-1,
+            "isall":1
+        }
+
+        $scope.move = function(categories_id, isall){
+            console.log('$scope.move---------->>>>>>>>>' + categories_id + ':' +isall);
+            $scope.tableOptions.isall = isall;
+            $scope.tableOptions.categories_id = categories_id;
+
         }
 
     }])

@@ -43,19 +43,86 @@ public class BoardJDBCTemplate implements BoardDAO {
     }
 
     @Override
-    public List<Board> listBoard(int draw, int start, int length) {
+    public List<Board> listBoard(int draw, int start, int length, int categories_id,int isall) {
+
         String SQL =
-                "(select  -1 as id, 'total' as title, 'total' as content, 'total' as author, to_date('19700101','YYYYMMDD') as cdate, 0 as likecnt,0 as hatecnt,count(id) as viewcnt \n" +
-                "from board)\n" +
-                "union all\n" +
-                "(select id, title, content, author, cdate, likecnt, hatecnt, viewcnt from board\n" +
-                "where 1=1\n" +
-                "order by id desc limit "+length+" offset "+(draw*length) +" )";
+                "( select  -1 as id, 'total' as title, 'total' as content, 'total' as author, to_date('19700101','YYYYMMDD') as cdate, 0 as likecnt,0 as hatecnt,count(id) as viewcnt, 0 as categories_id, '' as categories_name\n" +
+                " from board)\n" +
+                " union all\n" +
+                " (select b.id, b.title, b.content, b.author, b.cdate, b.likecnt, b.hatecnt, b.viewcnt, b.categories_id, c.name  as categories_name\n" +
+                "  from board b, categories c\n" +
+                " where 1=1\n" +
+                "  and b.categories_id = c.id \n" +
+                (isall == 0 ? "  and c.id = " + categories_id + " \n ":"") +
+                " order by id desc limit "+length+" offset "+(draw*length) +" )";
         log.info(SQL);
         List <Board> items =  null;
         try{
             items = jdbcTemplateObject.query(SQL,
                     new BoardMapper());
+        }catch(EmptyResultDataAccessException e){
+            e.printStackTrace();
+            return null;
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        return items;
+    }
+
+    @Override
+    public List<Comments> listComment(Integer id) {
+        String SQL =
+               "select\n" +
+               "  id, idtree, parent, content, author, cdate, likecnt, hatecnt,\n" +
+               "  coalesce(level- lag(level,1) over (order by seq),0) as prevlevel,\n" +
+               "  coalesce(level-lead(level,1) over (order by seq),0) as nextlevel \n" +
+               "  from (\n" +
+               "    SELECT\n" +
+               "      row_number() over() as seq,\n" +
+               "      ((q.h).node).id,\n" +
+               "      repeat(' ', (q.h).level) || ((q.h).node).id AS idtree,\n" +
+               "      ((q.h).node).parent,\n" +
+               "      ((q.h).node).author,\n" +
+               "      ((q.h).node).cdate,\n" +
+               "      ((q.h).node).likecnt,\n" +
+               "      ((q.h).node).hatecnt,\n" +
+               "      ((q.h).node).content,\n" +
+               "      (q.h).level,\n" +
+               "      h\n" +
+               "    FROM (\n" +
+               "           SELECT\n" +
+               "             fn_hierarchy_connnect_by(min(parent), 1, min(board_id)) AS h\n" +
+               "           FROM comments\n" +
+               "           WHERE board_id = "+id+"\n" +
+               "         ) AS q\n" +
+               "  ) a\n";
+
+        log.info(SQL);
+        List <Comments> items =  null;
+        try{
+            items = jdbcTemplateObject.query(SQL,
+                    new CommentsMapper());
+        }catch(EmptyResultDataAccessException e){
+            e.printStackTrace();
+            return null;
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        return items;
+    }
+
+    @Override
+    public List<Categories> listCategories(Integer id) {
+        String SQL =
+                " select boardmaster_id, id, name, isall from categories where boardmaster_id = " + id;
+
+        log.info(SQL);
+        List <Categories> items =  null;
+        try{
+            items = jdbcTemplateObject.query(SQL,
+                    new CategoriesMapper());
         }catch(EmptyResultDataAccessException e){
             e.printStackTrace();
             return null;

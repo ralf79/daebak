@@ -243,7 +243,7 @@ angular.module('MyApp.common.service', [])
                 var method = 'GET';
                 var that = this;
                 var deferred = $q.defer();
-                var url = this.appUrl + '/list' + (angular.isUndefined(suffix)?'':suffix);
+                var url = this.appUrl + '/list' + (!angular.isDefined(suffix)?'':suffix);
                 console.log('$baseService url is ' + url);
 
                 that.query(q, url, method, function(q, data){
@@ -262,7 +262,7 @@ angular.module('MyApp.common.service', [])
                 var method = 'GET';
                 var that = this;
                 var deferred = $q.defer();
-                var url = this.appUrl + '/view' + (angular.isUndefined(suffix)?'':suffix);
+                var url = this.appUrl + '/view' + (!angular.isDefined(suffix)?'':suffix);
                 console.log('$baseService url is ' + url);
 
                 that.query(q, url, method, function(q, data){
@@ -281,7 +281,7 @@ angular.module('MyApp.common.service', [])
                 var method = 'POST';
                 var that = this;
                 var deferred = $q.defer();
-                var url = this.appUrl + '/add' + (angular.isUndefined(suffix)?'':suffix);
+                var url = this.appUrl + '/add' + (!angular.isDefined(suffix)?'':suffix);
                 console.log('$baseService add url is ' + url);
                 that.query(q, url, method, function(q, data){
                     console.log('----- add started ------- ');
@@ -301,7 +301,7 @@ angular.module('MyApp.common.service', [])
                 var method = 'POST';
                 var that = this;
                 var deferred = $q.defer();
-                var url = this.appUrl + '/edit' + (angular.isUndefined(suffix)?'':suffix);
+                var url = this.appUrl + '/edit' + (!angular.isDefined(suffix)?'':suffix);
 
                 that.query(q, url, method, function(q, data){
                     console.log(that.keyPrefix + ' edit success ');
@@ -318,7 +318,7 @@ angular.module('MyApp.common.service', [])
                 var method = 'POST';
                 var that = this;
                 var deferred = $q.defer();
-                var url = this.appUrl + '/delete' + (angular.isUndefined(suffix)?'':suffix);
+                var url = this.appUrl + '/delete' + (!angular.isDefined(suffix)?'':suffix);
 
                 that.query(q, url, method, function(q, data){
                     console.log(that.keyPrefix + ' delete success ');

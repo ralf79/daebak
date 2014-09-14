@@ -10,7 +10,9 @@ public interface BoardDAO {
     public void setDataSource(DataSource ds);
     public void create(Board vo);
     public Board getBoard(Integer id);
-    public List<Board> listBoard(int draw, int start, int length);
+    public List<Board> listBoard(int draw, int start, int length, int categories_id,int isall);
+    public List<Comments> listComment(Integer id);
+    public List<Categories> listCategories(Integer id);
     public void delete(Board vo);
     public void update(Board vo);
     public void ilike(Board vo);
