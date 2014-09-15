@@ -60,7 +60,7 @@ union all
  from board b, categories c
  where 1=1
        and b.categories_id = c.id
-       and c.id = 1
+--        and c.id = 1
  order by id desc limit 10 offset 30 )
 ;
 
@@ -113,23 +113,15 @@ FROM generate_series(0,100) s, (SELECT
                                  WHERE 1 = 1
                                  ORDER BY id DESC
                                  LIMIT 50) x
-) y where y.board_id = 262142
+) y where y.board_id = 131040
 ;
-262144 0
-262143 101
-262142 202
-262141 303
-262140
-262139
+131042 0
+131041 101
+131040 202
 
-131072 0
-131071 100
-131070 202
-131069 303
-131068 404
-131067 505
-131066 606
 ;
+delete from comments where id = parent;
+
 
 (select id, title, content, author, cdate, likecnt, hatecnt, viewcnt from board
 where 1=1
@@ -190,14 +182,14 @@ select
            SELECT
              fn_hierarchy_connnect_by(min(parent), 1, min(board_id)) AS h
            FROM comments
-           WHERE board_id = 262134
+           WHERE board_id = 131042
          ) AS q
   ) a
 ;
-SELECT
-  fn_hierarchy_connnect_by(min(parent), 1, min(board_id)) AS h
-FROM comments
-WHERE board_id = 262132;
+-- SELECT
+--   fn_hierarchy_connnect_by(min(parent), 1, min(board_id)) AS h
+-- FROM comments
+-- WHERE board_id = 131042;
 
 -- SELECT
 -- row_number() over() as id,
@@ -247,16 +239,17 @@ insert into categories(boardmaster_id, id, name) values(1, 7, 'fashion');
 insert into categories(boardmaster_id, id, name) values(1, 8, 'fishing');
 insert into categories(boardmaster_id, id, name) values(1, 9, 'all');
 
-update board set categories = 1 where id%8 = 0;
-update board set categories = 2 where id%8 = 1;
-update board set categories = 3 where id%8 = 2;
-update board set categories = 4 where id%8 = 3;
-update board set categories = 5 where id%8 = 4;
-update board set categories = 6 where id%8 = 5;
-update board set categories = 7 where id%8 = 6;
-update board set categories = 8 where id%8 = 7;
+update board set categories_id = 1 where id%8 = 0;
+update board set categories_id = 2 where id%8 = 1;
+update board set categories_id = 3 where id%8 = 2;
+update board set categories_id = 4 where id%8 = 3;
+update board set categories_id = 5 where id%8 = 4;
+update board set categories_id = 6 where id%8 = 5;
+update board set categories_id = 7 where id%8 = 6;
+update board set categories_id = 8 where id%8 = 7;
 
 alter table board rename column categories to categories_id;
+alter table board add column categories_id int;
 
 alter table categories add column isall char(1) not null default '0';
 select boardmaster_id, id, name from categories where boardmaster_id =
@@ -268,9 +261,9 @@ update comments set board_id = 262134 where board_id= 262144;
 update comments set board_id = 262133 where board_id= 262143;
 update comments set board_id = 262132 where board_id= 262142;
 
-delete from comments where id = parent;
 
 select boardmaster_id, id, name from categories where boardmaster_id = 1;
 
 select * from categories where name ='all';
 update categories set isall=1 where name ='all';
+update categories set isall=0 where name <>'all';

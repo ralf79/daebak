@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="daebak:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="daebak.war">
+      <element id="artifact" artifact-name="daebak:war exploded" />
+    </root>
+  </artifact>
+</component>
