@@ -197,7 +197,6 @@ angular.module('MyApp.common.service', [])
         };
     })
 
-
     .factory('$baseService', ['$q', '$http', '$window', function($q, $http, $window){
 
         var callbackToken = 'JSON_CALLBACK';
@@ -333,6 +332,27 @@ angular.module('MyApp.common.service', [])
         } // end of return
 
     }])
+    .factory('$fileService', ['$q', '$http', '$window', function($q, $http, $window) {
+        this.appUrl = '/api/v1.0/common';
+
+        return {
+
+            saveImage: function (file, editor, welEditable) {
+                var method = 'POST';
+                data = new FormData();
+                data.append("file", file);
+                var url = this.appUrl + '/uploadFile';
+
+                $http({method: method, data: data, headers: {}, url: url})
+                    .success(function (data) {
+                        editor.insertImage(welEditable, data.url);
+                    })
+                    .error(function (data, error) {
+                        console.log(data + " " + error);
+                    })
+            }
+        }
+    }]);
 
 
 ;

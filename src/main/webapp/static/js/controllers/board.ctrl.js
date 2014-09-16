@@ -15,8 +15,34 @@ angular.module('MyApp.board.ctrl',[])
             $modalInstance.close($scope.editedItem);
         }
     })
-    .controller('BoardAddCtrl', ['$location', '$scope', '$modal', '$boardService','$routeParams', function($location, $scope, $modal, $boardService,$routeParams) {
+    .controller('BoardAddCtrl', ['$location', '$scope', '$modal','$fileService', '$boardService','$routeParams', function($location, $scope, $modal, $fileService, $boardService, $routeParams) {
         console.log('BaordWriteCtrl.....');
+        $scope.editedItem = {};
+        $scope.editedItem.title = '';
+        $scope.editedItem.categories = '-1';
+        $scope.summernote = {};
+        $scope.summerOptions = {
+            height: 300,
+            focus: true,
+            oninit:function(){
+                console.log('Summernote is launched');
+            },
+            onImageUpload: function(files, editor, $editable) {
+                console.log('image upload:', files, editor, $editable);
+                $fileService.saveImage(files[0], editor, $editable);
+            },
+            onpaste: function(e){
+                console.log('Called event paste');
+            },
+            setSummernode: function(summer){
+                $scope.summernote = summer;
+            }
+
+        };
+
+//        $scope.editedItem.content = $scope.summernote.code();
+
+
 
     }])
     .controller('BoardViewCtrl', ['$location', '$scope', '$modal', '$boardService','$routeParams', function($location, $scope, $modal, $boardService,$routeParams) {

@@ -43,6 +43,25 @@ var module = angular.module('MyApp.board.directive', [])
 
         }])
 
+        .directive('ngSummernote', ['$compile','$window', function($compile,$window){
+            return function(scope, element, attrs){
+                var summerOptions = {};
+                if(attrs.ngSummernote.length>0){
+                    summerOptions = scope.$eval(attrs.ngSummernote);
+                } else {
+                    summerOptions = {
+                        height:300,
+                        focus:true
+                    }
+                }
+                var summernode = $(element).summernote(summerOptions);
+                if(summerOptions.setSummernode)
+                    summerOptions.setSummernode(summernode);
+
+            };
+
+        }])
+
         .directive('ngCategories', ['$compile','$window', function($compile,$window){
             return function(scope, element, attrs){
                 var options = {};

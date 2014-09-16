@@ -28,6 +28,7 @@ angular.module('MyApp.board.service', [])
 
             return deferred.promise;
         }
+
         return obj;
     })
 

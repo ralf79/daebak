@@ -1,7 +1,6 @@
 package com.daebak.board;
 
 
-import com.daebak.DBUtil;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
