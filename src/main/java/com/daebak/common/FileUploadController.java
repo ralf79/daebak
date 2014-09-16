@@ -34,8 +34,10 @@ public class FileUploadController {
                 byte[] bytes = file.getBytes();
 
                 // Creating the directory to store file
-                String rootPath = System.getProperty("catalina.home");
-                File dir = new File(rootPath + File.separator + "webapps"+ File.separator + "ROOT" + File.separator + "tmpFiles" + File.separator);
+//                String rootPath = System.getProperty("catalina.home");
+                String rootPath = "/Users/system/git/daebak/target/daebak";
+//                File dir = new File(rootPath + File.separator + "webapps"+ File.separator + "ROOT" + File.separator + "tmpFiles" + File.separator);
+                File dir = new File(rootPath + File.separator + "tmpFiles" + File.separator);
                 if (!dir.exists())
                     dir.mkdirs();
 
@@ -82,8 +84,9 @@ public class FileUploadController {
                 byte[] bytes = file.getBytes();
 
                 // Creating the directory to store file
-                String rootPath = System.getProperty("catalina.home");
-                File dir = new File(rootPath + File.separator + "webapps"+ File.separator + "ROOT" + File.separator + "tmpFiles" + File.separator);
+//                String rootPath = System.getProperty("catalina.home");
+                String rootPath = "/Users/system/git/daebak/target/daebak";
+                File dir = new File(rootPath + File.separator + "tmpFiles" + File.separator);
                 if (!dir.exists())
                     dir.mkdirs();
 

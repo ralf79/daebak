@@ -339,17 +339,24 @@ angular.module('MyApp.common.service', [])
 
             saveImage: function (file, editor, welEditable) {
                 var method = 'POST';
-                data = new FormData();
-                data.append("file", file);
-                var url = this.appUrl + '/uploadFile';
-
-                $http({method: method, data: data, headers: {}, url: url})
-                    .success(function (data) {
-                        editor.insertImage(welEditable, data.url);
-                    })
-                    .error(function (data, error) {
-                        console.log(data + " " + error);
-                    })
+                var formData = new FormData();
+                formData.append("file", file);
+                var headers = {'Content-Type': undefined}
+                var url = '/api/v1.0/common/uploadFile';
+                console.log('>>>>>>>>> $fileService' + url);
+                $http({
+                    method: method,
+                    url: url,
+                    data: formData,
+                    headers: headers,
+                    transformRequest: angular.identity
+                })
+                .success(function (data) {
+                    editor.insertImage(welEditable, data.url);
+                })
+                .error(function (data, error) {
+                    console.log(data + " " + error);
+                })
             }
         }
     }]);
