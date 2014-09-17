@@ -113,11 +113,11 @@ FROM generate_series(0,100) s, (SELECT
                                  WHERE 1 = 1
                                  ORDER BY id DESC
                                  LIMIT 50) x
-) y where y.board_id = 131040
+) y where y.board_id = 65504
 ;
-131042 0
-131041 101
-131040 202
+65506 0
+65505 101
+65504 202
 
 ;
 delete from comments where id = parent;
@@ -182,7 +182,7 @@ select
            SELECT
              fn_hierarchy_connnect_by(min(parent), 1, min(board_id)) AS h
            FROM comments
-           WHERE board_id = 131042
+           WHERE board_id = 65504
          ) AS q
   ) a
 ;
@@ -248,7 +248,7 @@ update board set categories_id = 6 where id%8 = 5;
 update board set categories_id = 7 where id%8 = 6;
 update board set categories_id = 8 where id%8 = 7;
 
-alter table board rename column categories to categories_id;
+-- alter table board rename column categories to categories_id;
 alter table board add column categories_id int;
 
 alter table categories add column isall char(1) not null default '0';
@@ -267,3 +267,19 @@ select boardmaster_id, id, name from categories where boardmaster_id = 1;
 select * from categories where name ='all';
 update categories set isall=1 where name ='all';
 update categories set isall=0 where name <>'all';
+
+select * from board order by id desc;
+
+( select  -1 as id, 'total' as title, 'total' as content, 'total' as author, to_date('19700101','YYYYMMDD') as cdate, 0 as likecnt,0 as hatecnt,count(id) as viewcnt, 0 as categories_id, '' as categories_name
+  from board)
+union all
+(select b.id, b.title, b.content, b.author, b.cdate, b.likecnt, b.hatecnt, b.viewcnt, b.categories_id, c.name  as categories_name
+ from board b, categories c
+ where 1=1
+       and b.categories_id = c.id
+ order by id desc limit 20 offset 0 );
+
+
+select * from board where categories_id is null;
+
+update board set categories_id = 1 where categories_id is null;

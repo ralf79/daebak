@@ -223,11 +223,16 @@ angular.module('MyApp.common.service', [])
                 console.log(q);
                 onSuccess = onSuccess || function() {};
                 onFailure = onFailure || function() {};
-                // var headers= {'Content-Type':'application/x-www-form-urlencoded'};
-                var headers = {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
-                // $http({method:method, url:url})
-                // console.log('query in q is ' + JSON.stringify(q));
-                var xsrf = angular.isUndefined(q) ? '' : $.param(q);
+                var headers;
+                var xsrf;
+                if(method == 'POST'){
+                    headers = {'Content-Type': 'application/json'}
+                    xsrf = angular.isUndefined(q) ? '' : JSON.stringify(q);
+                }else if(method == 'GET'){
+//                    headers = {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'};
+                    xsrf = angular.isUndefined(q) ? '' : $.param(q);
+                }
+
                 console.log('query in xsrf is ' + xsrf) ;
                 $http({method:method, data:xsrf, headers:headers, url:url})
                     .success(function(data){

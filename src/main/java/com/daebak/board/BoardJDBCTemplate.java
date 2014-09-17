@@ -24,8 +24,8 @@ public class BoardJDBCTemplate implements BoardDAO {
 
     @Override
     public void create(Board vo) {
-        String SQL = "insert into board(title,content,author) values(?,?,?)";
-        jdbcTemplateObject.update(SQL, vo.getTitle(), vo.getContent(), vo.getAuthor() );
+        String SQL = "insert into board(title,content,author, categories_id) values(?,?,?,?)";
+        jdbcTemplateObject.update(SQL, vo.getTitle(), vo.getContent(), vo.getAuthor() ,vo.getCategories_id() );
         log.info("Created Record = " + vo);
     }
 
@@ -54,7 +54,7 @@ public class BoardJDBCTemplate implements BoardDAO {
                 " where 1=1\n" +
                 "  and b.categories_id = c.id \n" +
                 (isall == 0 ? "  and c.id = " + categories_id + " \n ":"") +
-                " order by id desc limit "+length+" offset "+(draw*length) +" )";
+                " order by id desc limit "+length+" offset "+((start)*length) +" )";
         log.info(SQL);
         List <Board> items =  null;
         try{

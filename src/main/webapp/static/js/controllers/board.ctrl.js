@@ -20,7 +20,7 @@ angular.module('MyApp.board.ctrl',[])
         $scope.editedItem = {};
         $scope.editedItem.title = '';
         $scope.board_id = 1;
-        $scope.editedItem.categories = '-1';
+        $scope.editedItem.categories_id = '-1';
         $scope.summernote = {};
         $scope.categoriesOption = {};
         var ipromise = $boardService.boardInfo([], '/'+$scope.board_id);
@@ -50,8 +50,12 @@ angular.module('MyApp.board.ctrl',[])
             var q = $scope.editedItem;
             q.id = 0;
             q.content = $scope.summernote.code();
+            q.author = "test";
+            console.log(q);
             var pp = $boardService.add(q, '');
             pp.then(function(data){
+                console.log('------------- addBoard result is ');
+                console.log(data);
                 if(data.success == '200'){
                     $location.path('/board/list');
                 }
@@ -96,18 +100,17 @@ angular.module('MyApp.board.ctrl',[])
         ipromise.then(function(data){
             $scope.categoriesOption.data = data.categories;
         });
-//        $scope.tableOptions.categories_id = -1;
-//        $scope.tableOptions.isall = 1;
 
         $scope.tableOptions =
-        { // here you can define a typical datatable settings from http://datatables.net/usage/options
+        {
             "lengthMenu": [
-                [10, 20, 50, 100, 150, -1],
-                [10, 20, 50, 100, 150, "All"] // change per page values here
+                [10, 20, 50, 100],
+                [10, 20, 50, 100] // change per page values here
             ],
-            "pageLength": 10, // default record count per page
+            "pageLength": 20, // default record count per page
             "ajax": {
-                "url": "/api/v1.0/board/list", // ajax source
+                "base_url":"/api/v1.0/board/list/:categories_id/:isall",
+                "url": "" , // ajax source
                 "type":"GET"
             },
             "order": [

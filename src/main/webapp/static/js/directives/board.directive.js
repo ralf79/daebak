@@ -24,20 +24,27 @@ var module = angular.module('MyApp.board.directive', [])
                     dataTable: tableOptions
 
                 };
-
+                var isInitGrid = false;
                 var grid = new $window.Datatable();
-                grid.init(options);
+//                options.dataTable.ajax.url = options.dataTable.ajax.base_url.replace(':categories_id', options.dataTable.categories_id).replace(':isall', options.dataTable.isall);
+
                 var render = function(){
-                    console.log('gridTable------------>>>>>>>>>');
-                    var newurl = options.dataTable.ajax.url + '/' + options.dataTable.categories_id + '/' + options.dataTable.isall;
-//                    console.log(options.dataTable);
-                    grid.getDataTable().ajax.url(newurl).load();
+                    options.dataTable.ajax.url = options.dataTable.ajax.base_url.replace(':categories_id', options.dataTable.categories_id).replace(':isall', options.dataTable.isall);
+                    console.log(options.dataTable.ajax.url);
+                    if(!isInitGrid){
+                        grid.init(options);
+                        isInitGrid = true;
+                    }else{
+                        grid.getDataTable().ajax.url(options.dataTable.ajax.url).load();
+                    }
+
                 }
-                scope.$watch(function() {
+                scope.$watch(function(){
                     return options.dataTable.categories_id;
-                    }, function(value){
-                        console.log('------ gridTable watch options.data...... ' + value);
-                        render();
+                }, function(value){
+                        console.log('------ gridTable watch options.data......>>' + value + '<<<');
+                        if(angular.isDefined(value))
+                            render();
                 });
             };
 
@@ -105,7 +112,8 @@ var module = angular.module('MyApp.board.directive', [])
                     element.append($compile( htmlarr.join("") )(scope));
                 }
                 scope.$watch(function(){
-                    console.log('------ ngCategories watch options.data...... ');
+//                    console.log('------ ngCategoryList watch options.data...... ');
+//                    console.log(JSON.stringify(options.data));
                     return JSON.stringify(options.data);
                 }, function(value){
                     render(options.data);

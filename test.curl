@@ -1,5 +1,5 @@
 -- create
-curl -H 'Content-Type: application/json' -d '{"id":0,"title":"Test Board Title","content":"This is Board new Test Data of Deabak","author":"lee"}' 'http://localhost:8080/api/v1.0/board/create'
+curl -H 'Content-Type: application/json' -d '{"id":0,"title":"Test Board Title","content":"This is Board new Test Data of Deabak","author":"lee"}' 'http://localhost:8080/api/v1.0/board/add'
 
 
 
