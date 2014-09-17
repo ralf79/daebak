@@ -19,8 +19,15 @@ angular.module('MyApp.board.ctrl',[])
         console.log('BaordWriteCtrl.....');
         $scope.editedItem = {};
         $scope.editedItem.title = '';
+        $scope.board_id = 1;
         $scope.editedItem.categories = '-1';
         $scope.summernote = {};
+        $scope.categoriesOption = {};
+        var ipromise = $boardService.boardInfo([], '/'+$scope.board_id);
+        ipromise.then(function(data){
+            $scope.categoriesOption.data = data.categories;
+        });
+
         $scope.summerOptions = {
             height: 300,
             focus: true,
@@ -39,23 +46,33 @@ angular.module('MyApp.board.ctrl',[])
             }
 
         };
+        $scope.addBoard = function(){
+            var q = $scope.editedItem;
+            q.id = 0;
+            q.content = $scope.summernote.code();
+            var pp = $boardService.add(q, '');
+            pp.then(function(data){
+                if(data.success == '200'){
+                    $location.path('/board/list');
+                }
+            });
 
-//        $scope.editedItem.content = $scope.summernote.code();
+        }
 
+        $scope.moveList = function(){
+            $location.path('/board/list');
+        }
 
 
     }])
     .controller('BoardViewCtrl', ['$location', '$scope', '$modal', '$boardService','$routeParams', function($location, $scope, $modal, $boardService,$routeParams) {
         $scope.$routeParams = $routeParams;
         $scope.board={};
+        $scope.board_id = 1;
         $scope.board.commentsOption = {};
         $scope.board.id = $routeParams.id;
         console.log('$scope.detail : ' + $scope.board.id);
         var pp = $boardService.view([],'/'+$scope.board.id);
-//        $scope.board.content = "";
-//        $scope.board.title = "";
-//        $scope.board.author = "";
-//        $scope.board.cdate = "";
 
         pp.then(function(data) {
             console.log(data);

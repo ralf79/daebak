@@ -92,11 +92,13 @@ public class BoardController {
 
     @RequestMapping(value = BoardRestURIConstants.CREATE_URL, method = RequestMethod.POST)
     public @ResponseBody
-    String createBoard(@RequestBody Board board, ModelMap model) {
+    Map<String, String> createBoard(@RequestBody Board board, ModelMap model) {
         log.info("--------- createBoard");
         log.info(String.valueOf(board));
         boardJDBCTemplate.create(board);
-        return "created";
+        Map<String, String> result = new HashMap<String, String>();
+        result.put("success", "200");
+        return result;
     }
 
     @RequestMapping(value = BoardRestURIConstants.EDIT_URL, method = RequestMethod.POST)

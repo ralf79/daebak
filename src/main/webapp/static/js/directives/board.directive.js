@@ -87,6 +87,32 @@ var module = angular.module('MyApp.board.directive', [])
 
         }])
 
+        .directive('ngCategoryList', ['$compile','$window', function($compile,$window){
+            return function(scope, element, attrs){
+                var options = {};
+                if(attrs.ngCategoryList.length>0){
+                    options = scope.$eval(attrs.ngCategoryList);
+                }
+
+                var render = function(data){
+                    var htmlarr = [];
+                    for(var k=0;data && k<data.length;k++){
+                        var d = data[k];
+//                        htmlarr.push('<div class="btn-group" style="padding-left:5px;"><a class="btn default yellow-stripe" ng-click="move('+ d.id+','+ d.isall+')"><span class="hidden-480">'+ d.name+'</span></a></div>');
+                        if(d.isall == '0')
+                            htmlarr.push('<option value="'+ d.id+'">'+ d.name+'</option>');
+                    }
+                    element.append($compile( htmlarr.join("") )(scope));
+                }
+                scope.$watch(function(){
+                    console.log('------ ngCategories watch options.data...... ');
+                    return JSON.stringify(options.data);
+                }, function(value){
+                    render(options.data);
+                });
+            };
+
+        }])
         .directive('ngComments', ['$compile','$window', function($compile,$window){
                 return function(scope, element, attrs){
                     var options = {};

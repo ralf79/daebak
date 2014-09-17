@@ -1382,12 +1382,12 @@
 										* </span>
                             </label>
                             <div class="col-md-6">
-                                <select class="form-control select2me" name="options2" ng-model="editedItem.categories">
-                                    <option value="">Select...</option>
-                                    <option value="Option 1">Category 1</option>
-                                    <option value="Option 2">Category 2</option>
-                                    <option value="Option 3">Category 3</option>
-                                    <option value="Option 4">Category 4</option>
+                                <select class="form-control select2me" name="options2" ng-model="editedItem.categories" ng-category-list="categoriesOption">
+                                    <!--<option value="">Select...</option>-->
+                                    <!--<option value="Option 1">Category 1</option>-->
+                                    <!--<option value="Option 2">Category 2</option>-->
+                                    <!--<option value="Option 3">Category 3</option>-->
+                                    <!--<option value="Option 4">Category 4</option>-->
                                 </select>
                             </div>
                         </div>
@@ -1485,8 +1485,8 @@
                     <div class="form-actions">
                         <div class="row">
                             <div class="col-md-offset-3 col-md-9">
-                                <button type="submit" class="btn green">Submit</button>
-                                <button type="button" class="btn default">Cancel</button>
+                                <button type="submit" class="btn green" ng-click="addBoard();">Submit</button>
+                                <button type="button" class="btn default"  ng-click="moveList();">Cancel</button>
                             </div>
                         </div>
                     </div>
