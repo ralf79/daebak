@@ -35,6 +35,7 @@ angular.module('MyApp.board.ctrl',[])
             console.log(data);
             var detail = data.board;
 //            $scope.editedItem.content = detail.content;
+            $scope.editedItem.id = detail.id;
             $scope.editedItem.title = detail.title;
             $scope.editedItem.author = detail.author;
             $scope.editedItem.cdate = detail.cdate;
@@ -62,7 +63,7 @@ angular.module('MyApp.board.ctrl',[])
 
         $scope.save= function(){
             var q = $scope.editedItem;
-            q.id = 0;
+//            q.id = 0;
             q.content = $scope.summernote.code();
             q.author = "test";
             var pp = $boardService.edit(q, '');
@@ -157,6 +158,28 @@ angular.module('MyApp.board.ctrl',[])
 
             console.log($scope.board);
         });
+
+        $scope.delete = function(){
+            // authority check
+            var q = $scope.board;
+            delete q.commentsOption;
+            
+            var pp = $boardService.delete(q,'');
+            pp.then(function(data){
+                console.log('------------- delete result is ');
+                console.log(data);
+                if(data.success == '200'){
+                    $location.path('/board/list');
+                }
+            });
+        }
+
+        $scope.edit = function(){
+            console.log('$scope.edit');
+            // authority check
+            $location.path('/board/edit/'+$scope.board.id);
+
+        }
     }])
     .controller('BoardListCtrl', ['$location', '$scope', '$modal', '$boardService', function($location, $scope, $modal, $boardService) {
         $scope.current_path = '#' + $location.url();

@@ -19,3 +19,4 @@ curl -X -GET http://localhost:8080/api/v1.0/board/get
 -- private Integer viewcnt;
 
 
+curl -H 'Content-Type: application/json' -d '{"id":65538,"title":"Test Board Title","content":"This is Board new Test Data of Deabak","author":"lee"}' 'http://localhost:8080/api/v1.0/board/delete'

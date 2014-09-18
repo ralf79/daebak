@@ -103,18 +103,24 @@ public class BoardController {
 
     @RequestMapping(value = BoardRestURIConstants.EDIT_URL, method = RequestMethod.POST)
     public @ResponseBody
-    String editBoard(@RequestBody Board board,ModelMap model) {
+    Map<String, String> editBoard(@RequestBody Board board,ModelMap model) {
         log.info("--------- editBoard");
         log.info(String.valueOf(board));
         boardJDBCTemplate.update(board);
-        return "edited";
+        Map<String, String> result = new HashMap<String, String>();
+        result.put("success", "200");
+        return result;
     }
 
     @RequestMapping(value = BoardRestURIConstants.DELETE_URL, method = RequestMethod.POST)
     public @ResponseBody
-    String removeBoard(@RequestBody Board board) {
+    Map<String, String> deleteBoard(@RequestBody Board board, ModelMap model) {
+        log.info("--------- deleteBoard");
+        log.info(String.valueOf(board));
         boardJDBCTemplate.delete(board);
-        return "removed";
+        Map<String, String> result = new HashMap<String, String>();
+        result.put("success", "200");
+        return result;
     }
 
 
