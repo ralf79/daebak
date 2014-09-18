@@ -149,7 +149,7 @@ public class BoardJDBCTemplate implements BoardDAO {
 
     @Override
     public void update(Board vo) {
-        String SQL = "update board set title=?, content=?,likecnt=?,hatecnt=?, viewcnt=? where id = ?";
+        String SQL = "update board set title=?, content=?, likecnt=?,hatecnt=?, viewcnt=? where id = ?";
         try{
             jdbcTemplateObject.update(SQL, vo.getTitle(), vo.getContent(), vo.getLikecnt(), vo.getHatecnt(), vo.getViewcnt(), vo.getId());
             log.info("Updated Record with ID = " + vo.getId());

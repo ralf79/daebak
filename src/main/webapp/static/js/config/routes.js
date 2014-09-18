@@ -32,12 +32,16 @@ angular.module('MyApp.Routes', [])
             controller : 'BoardAddCtrl',
             templateUrl : CONFIG.prepareViewTemplateUrl('board-add')
         });
+        ROUTER.when('board_add_path', '/board/edit/:id', {
+            controller : 'BoardEditCtrl',
+            templateUrl : CONFIG.prepareViewTemplateUrl('board-add')
+        });
 
 
 //        ROUTER.alias('home_path', 'board_add_path');
 
         ROUTER.otherwise({
-            redirectTo : '/board/add'
+            redirectTo : '/board/edit'
         });
 
         ROUTER.install($routeProvider);

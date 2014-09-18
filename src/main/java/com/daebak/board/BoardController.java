@@ -104,7 +104,7 @@ public class BoardController {
     @RequestMapping(value = BoardRestURIConstants.EDIT_URL, method = RequestMethod.POST)
     public @ResponseBody
     String editBoard(@RequestBody Board board,ModelMap model) {
-        log.info("--------- createBoard");
+        log.info("--------- editBoard");
         log.info(String.valueOf(board));
         boardJDBCTemplate.update(board);
         return "edited";

@@ -15,6 +15,71 @@ angular.module('MyApp.board.ctrl',[])
             $modalInstance.close($scope.editedItem);
         }
     })
+    .controller('BoardEditCtrl', ['$location', '$scope', '$modal','$fileService', '$boardService','$routeParams', function($location, $scope, $modal, $fileService, $boardService, $routeParams) {
+        console.log('BaordEditCtrl.....');
+        $scope.editedItem = {};
+        $scope.editedItem.title = '';
+        $scope.board_id = 1;
+        $scope.editedItem.categories_id = '-1';
+        $scope.summernote = {};
+        $scope.categoriesOption = {};
+        $scope.editedItem.id = $routeParams.id;
+
+        var ipromise = $boardService.boardInfo([], '/'+$scope.board_id);
+        ipromise.then(function(data){
+            $scope.categoriesOption.data = data.categories;
+        });
+        var pp = $boardService.view([],'/'+$scope.editedItem.id);
+
+        pp.then(function(data) {
+            console.log(data);
+            var detail = data.board;
+//            $scope.editedItem.content = detail.content;
+            $scope.editedItem.title = detail.title;
+            $scope.editedItem.author = detail.author;
+            $scope.editedItem.cdate = detail.cdate;
+            $scope.summernote.code(detail.content);
+        });
+
+        $scope.summerOptions = {
+            height: 300,
+            focus: true,
+            oninit:function(){
+                console.log('Summernote is launched');
+            },
+            onImageUpload: function(files, editor, $editable) {
+                console.log('image upload:', files, editor, $editable);
+                $fileService.saveImage(files[0], editor, $editable);
+            },
+            onpaste: function(e){
+                console.log('Called event paste');
+            },
+            setSummernode: function(summer){
+                $scope.summernote = summer;
+            }
+
+        };
+
+        $scope.save= function(){
+            var q = $scope.editedItem;
+            q.id = 0;
+            q.content = $scope.summernote.code();
+            q.author = "test";
+            var pp = $boardService.edit(q, '');
+            pp.then(function(data){
+                if(data.success == '200'){
+                    $location.path('/board/list');
+                }
+            });
+
+        }
+
+        $scope.list = function(){
+            $location.path('/board/list');
+        }
+
+
+    }])
     .controller('BoardAddCtrl', ['$location', '$scope', '$modal','$fileService', '$boardService','$routeParams', function($location, $scope, $modal, $fileService, $boardService, $routeParams) {
         console.log('BaordWriteCtrl.....');
         $scope.editedItem = {};
@@ -46,7 +111,7 @@ angular.module('MyApp.board.ctrl',[])
             }
 
         };
-        $scope.addBoard = function(){
+        $scope.save = function(){
             var q = $scope.editedItem;
             q.id = 0;
             q.content = $scope.summernote.code();
@@ -63,18 +128,20 @@ angular.module('MyApp.board.ctrl',[])
 
         }
 
-        $scope.moveList = function(){
+        $scope.list = function(){
             $location.path('/board/list');
         }
 
 
     }])
+
     .controller('BoardViewCtrl', ['$location', '$scope', '$modal', '$boardService','$routeParams', function($location, $scope, $modal, $boardService,$routeParams) {
-        $scope.$routeParams = $routeParams;
         $scope.board={};
         $scope.board_id = 1;
         $scope.board.commentsOption = {};
+        $scope.$routeParams = $routeParams;
         $scope.board.id = $routeParams.id;
+
         console.log('$scope.detail : ' + $scope.board.id);
         var pp = $boardService.view([],'/'+$scope.board.id);
 

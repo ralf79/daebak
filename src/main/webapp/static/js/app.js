@@ -10,6 +10,7 @@ console.log('app.js');
 var MyApp = window.MyApp = angular.module('MyApp',
         [
             'ngRoute',
+            'ngSanitize',
 //            'dialogs',
             // services  //
             'MyApp.common.service',
