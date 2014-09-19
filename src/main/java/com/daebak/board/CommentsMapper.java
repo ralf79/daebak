@@ -15,14 +15,8 @@ public class CommentsMapper implements RowMapper<Comments> {
     @Override
     public Comments mapRow(ResultSet rs, int i) throws SQLException {
         Comments vo = new Comments();
-//        vo.setId(resultSet.getInt("id"));
-//        vo.setTitle(resultSet.getString("title"));
-//        vo.setAuthor(resultSet.getString("author"));
-//        vo.setCdate(resultSet.getString("cdate"));
-//        vo.setContent(resultSet.getString("content"));
-//        vo.setLikecnt(resultSet.getInt("likecnt"));
-//        vo.setHatecnt(resultSet.getInt("hatecnt"));
-//        vo.setViewcnt(resultSet.getInt("viewcnt"));
+
+        vo.setBoard_id(rs.getInt("board_id"));
         vo.setId(rs.getInt("id"));
         vo.setIdtree(rs.getString("idtree"));
         vo.setContent(rs.getString("content"));

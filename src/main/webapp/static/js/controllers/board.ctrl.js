@@ -180,6 +180,16 @@ angular.module('MyApp.board.ctrl',[])
             $location.path('/board/edit/'+$scope.board.id);
 
         }
+
+        $scope.list = function(){
+            console.log('$scope.list');
+            // authority check
+            $location.path('/board/list');
+
+        }
+
+        $scope.showpostinsert = false;
+
     }])
     .controller('BoardListCtrl', ['$location', '$scope', '$modal', '$boardService', function($location, $scope, $modal, $boardService) {
         $scope.current_path = '#' + $location.url();

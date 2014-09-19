@@ -1,11 +1,14 @@
 package com.daebak.board;
 
+import com.daebak.IndexController;
+
 import java.io.Serializable;
 
 /**
  * Created by system on 2014. 9. 13..
  */
 public class Comments implements Serializable {
+    private Integer board_id;
     private Integer id;
     private String idtree;
     private Integer parent;
@@ -17,6 +20,13 @@ public class Comments implements Serializable {
     private Integer prevlevel;
     private Integer nextlevel;
 
+    public Integer getBoard_id() {
+        return board_id;
+    }
+
+    public void setBoard_id(Integer board_id) {
+        this.board_id = board_id;
+    }
 
     public String getIdtree() {
         return idtree;
@@ -25,6 +35,7 @@ public class Comments implements Serializable {
     public void setIdtree(String structure) {
         this.idtree = structure;
     }
+
     public Integer getId() {
         return id;
     }

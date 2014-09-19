@@ -71,7 +71,7 @@ public class BoardJDBCTemplate implements BoardDAO {
     }
 
     @Override
-    public List<Comments> listComment(Integer id) {
+    public List<Comments> listComment(Integer board_id) {
         String SQL =
                "select\n" +
                "  id, idtree, parent, content, author, cdate, likecnt, hatecnt,\n" +
@@ -94,7 +94,7 @@ public class BoardJDBCTemplate implements BoardDAO {
                "           SELECT\n" +
                "             fn_hierarchy_connnect_by(min(parent), 1, min(board_id)) AS h\n" +
                "           FROM comments\n" +
-               "           WHERE board_id = "+id+"\n" +
+               "           WHERE board_id = "+board_id+"\n" +
                "         ) AS q\n" +
                "  ) a\n";
 
@@ -184,4 +184,58 @@ public class BoardJDBCTemplate implements BoardDAO {
         log.info("Updated Record with ID = " + vo.getId());
         return;
     }
+
+    @Override
+    public void createComment(Comments vo) {
+        String SQL = "insert into comments(board_id, id, parent, content,author) select ?, max(id), ?, ?, ?  from comments ; ";
+        jdbcTemplateObject.update(SQL, vo.getBoard_id(), vo.getParent(), vo.getContent(), vo.getAuthor()  );
+        log.info("createComment created Record = " + vo);
+        return;
+
+    }
+
+    @Override
+    public void updateComment(Comments vo) {
+        String SQL = "update comments set content=? where board_id=? and id = ?";
+        try{
+            jdbcTemplateObject.update(SQL, vo.getContent(),vo.getBoard_id(), vo.getId());
+            log.info("updateComment with ID = " + vo.getId());
+        }catch(Exception e){
+            log.info("BoardJDBCTemplate updateComment ");
+            log.info(e.getMessage());
+        }
+        return;
+    }
+
+    @Override
+    public void deleteComment(Comments vo) {
+        String SQL = "delete from comments p  where p.board_id = ? and p.id = ? and not exists (select 'e' from comments c where p.id = c.parent ); ";
+        try{
+            jdbcTemplateObject.update(SQL, vo.getBoard_id(), vo.getId());
+            log.info("Deleted Record with ID = " + vo.getId());
+
+        }catch(Exception e){
+            log.info("BoardJDBCTemplate delete");
+            log.info(e.getMessage());
+        }
+        return;
+    }
+
+    @Override
+    public void ilikeComment(Comments vo) {
+        String SQL = "update comments set likecnt=? where board_id = ? and id = ?";
+        jdbcTemplateObject.update(SQL, vo.getLikecnt(), vo.getId());
+        log.info("Updated Record with ID = " + vo.getId());
+        return;
+    }
+
+    @Override
+    public void ihateComment(Comments vo) {
+        String SQL = "update comments set hatecnt=? where board_id = ? and id = ?";
+        jdbcTemplateObject.update(SQL, vo.getHatecnt(), vo.getId());
+        log.info("Updated Record with ID = " + vo.getId());
+        return;
+    }
+
+
 }

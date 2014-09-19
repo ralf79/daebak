@@ -283,3 +283,7 @@ union all
 select * from board where categories_id is null;
 
 update board set categories_id = 1 where categories_id is null;
+
+delete from comments p  where p.board_id = 131042 and p.id = 99 and not exists (select 'e' from comments c where p.id = c.parent );
+
+select * from comments p where board_id = 131042;
