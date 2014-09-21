@@ -33,4 +33,13 @@ angular.module('MyApp.board.service', [])
         return obj;
     })
 
+    .factory('$commentService', function($q, $http, $window, $baseService, $remoteurl){
+        var obj = Object.create($baseService);
+        var appUrl = $remoteurl.get('/api/v1.0/board/comment');
+        var keyPrefix = 'comment-'
+        obj.set(appUrl, keyPrefix);
+        console.log('after creation $boardService url is ' + obj.getUrl());
+
+        return obj;
+    })
 ;

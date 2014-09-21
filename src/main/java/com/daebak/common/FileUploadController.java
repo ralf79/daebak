@@ -35,7 +35,7 @@ public class FileUploadController {
 
                 // Creating the directory to store file
 //                String rootPath = System.getProperty("catalina.home");
-                String rootPath = "/Users/airplug/git/daebak/target/daebak";
+                String rootPath = "/Users/system/git/daebak/target/daebak";
 //                File dir = new File(rootPath + File.separator + "webapps"+ File.separator + "ROOT" + File.separator + "tmpFiles" + File.separator);
                 File dir = new File(rootPath + File.separator + "tmpFiles" + File.separator);
                 if (!dir.exists())
@@ -85,7 +85,7 @@ public class FileUploadController {
 
                 // Creating the directory to store file
 //                String rootPath = System.getProperty("catalina.home");
-                String rootPath = "/Users/airplug/git/daebak/target/daebak";
+                String rootPath = "/Users/system/git/daebak/target/daebak";
                 File dir = new File(rootPath + File.separator + "tmpFiles" + File.separator);
                 if (!dir.exists())
                     dir.mkdirs();

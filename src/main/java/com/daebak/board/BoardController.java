@@ -126,34 +126,43 @@ public class BoardController {
 
     @RequestMapping(value = BoardRestURIConstants.CREATE_COMMENT_URL, method = RequestMethod.POST)
     public @ResponseBody
-    Map<String, String> createComment(@RequestBody Comments vo, ModelMap model) {
+    Map<String, Object> createComment(@RequestBody Comments vo, ModelMap model) {
         log.info("--------- createComment");
         log.info(String.valueOf(vo));
         boardJDBCTemplate.createComment(vo);
-        Map<String, String> result = new HashMap<String, String>();
+        Map<String, Object> result = new HashMap<String, Object>();
         result.put("success", "200");
+        List<Comments> cl = boardJDBCTemplate.listComment(vo.getBoard_id());
+        result.put("comments", cl);
+
         return result;
     }
 
     @RequestMapping(value = BoardRestURIConstants.DELETE_COMMENT_URL, method = RequestMethod.POST)
     public @ResponseBody
-    Map<String, String> deleteComment(@RequestBody Comments vo, ModelMap model) {
+    Map<String, Object> deleteComment(@RequestBody Comments vo, ModelMap model) {
         log.info("--------- deleteComment");
         log.info(String.valueOf(vo));
         boardJDBCTemplate.deleteComment(vo);
-        Map<String, String> result = new HashMap<String, String>();
+        Map<String, Object> result = new HashMap<String, Object>();
+        List<Comments> cl = boardJDBCTemplate.listComment(vo.getBoard_id());
+        result.put("comments", cl);
+
         result.put("success", "200");
         return result;
     }
 
     @RequestMapping(value = BoardRestURIConstants.EDIT_COMMENT_URL, method = RequestMethod.POST)
     public @ResponseBody
-    Map<String, String> updateComment(@RequestBody Comments vo, ModelMap model) {
+    Map<String, Object> updateComment(@RequestBody Comments vo, ModelMap model) {
         log.info("--------- updateComment");
         log.info(String.valueOf(vo));
         boardJDBCTemplate.updateComment(vo);
-        Map<String, String> result = new HashMap<String, String>();
+        Map<String, Object> result = new HashMap<String, Object>();
         result.put("success", "200");
+        List<Comments> cl = boardJDBCTemplate.listComment(vo.getBoard_id());
+        result.put("comments", cl);
+
         return result;
     }
 

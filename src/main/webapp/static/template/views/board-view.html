@@ -1295,6 +1295,7 @@
     <button class="margin-top-20 btn blue" ng-click="list()">List</button>
     <hr>
     <div ng-comments="board.commentsOption"></div>
+    <div class="post-comment" ng-show="showpostinsert" ng-comment-add="commentAddOptions">
     <!--<hr>-->
     <!--<div class="media">-->
         <!--<h3>Comments</h3>-->
@@ -1368,42 +1369,40 @@
             <!--&lt;!&ndash;end media&ndash;&gt;-->
         <!--</div>-->
     <!--</div>-->
-    <!--&lt;!&ndash;end media&ndash;&gt;-->
+    <!--end media-->
     <!--<div class="media">-->
         <!--<a href="#" class="pull-left">-->
             <!--<img alt="" src="/static/assets/admin/layout2/img/avatar2.jpg" class="media-object">-->
         <!--</a>-->
         <!--<div class="media-body">-->
-            <!--<h4 class="media-heading">Media heading <span>July 5,2013 / <a href="#">Reply </a></span>-->
+            <!--<h4 class="media-heading">Media heading <span>July 5,2013 / <a href="#" ng-click="post_add()">Reply </a></span>-->
             <!--</h4>-->
             <!--<p>-->
                 <!--Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.-->
             <!--</p>-->
         <!--</div>-->
     <!--</div>-->
-    <!--&lt;!&ndash;end media&ndash;&gt;-->
-    <hr>
-    <div class="post-comment" ng-show="showpostinsert">
-        <h3>Leave a Comment</h3>
-        <form role="form">
-            <div class="form-group">
-                <label class="control-label">Name <span class="required"> * </span>
-                </label>
-                <input type="text" class="form-control">
-            </div>
-            <div class="form-group">
-                <label class="control-label">Email <span class="required"> * </span>
-                </label>
-                <input type="text" class="form-control">
-            </div>
-            <div class="form-group">
-                <label class="control-label">Message <span class="required"> * </span>
-                </label>
-                <textarea class="col-md-10 form-control" rows="8"></textarea>
-            </div>
-            <button class="margin-top-20 btn blue" type="submit" ng-click="post_add()">Post a Comment</button>
-        </form>
-    </div>
+    <!--end media-->
+
+    <!--<hr>-->
+    <!--<div class="post-comment" ng-show="showpostinsert" ng-comment-add="commentAddOptions">-->
+        <!--<h3>Leave a Comment</h3>-->
+        <!--<form role="form">-->
+            <!--<div class="form-group">-->
+                <!--<label class="control-label">Name <span class="required"> * </span>-->
+                <!--</label>-->
+                <!--<input type="text" class="form-control" ng-model="comment.author">-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label class="control-label">Message <span class="required"> * </span>-->
+                <!--</label>-->
+                <!--<textarea class="col-md-10 form-control" rows="8" ng-model="comment.content"></textarea>-->
+            <!--</div>-->
+            <!--<button class="margin-top-20 btn blue" type="submit" ng-click="post_add()">Post a Comment</button>-->
+        <!--</form>-->
+    <!--</div>-->
+
+
 </div>
 <div class="col-md-3">
 <h3>News Feeds</h3>

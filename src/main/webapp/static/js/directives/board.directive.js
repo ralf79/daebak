@@ -134,7 +134,7 @@ var module = angular.module('MyApp.board.directive', [])
                         var comment_html = [];
                         for(var k=0;data && k<data.length;k++){
                             var d = data[k];
-                            comment_html.push(makeCommentHtml(d.nextlevel, d.idtree, d.parent, d.author, d.content, d.cdate, d.likecnt, d.hatecnt));
+                            comment_html.push(makeCommentHtml(d.nextlevel, d.idtree, d.parent, d.author, d.content, d.cdate, d.likecnt, d.hatecnt, d.id));
                             var nextlevel = parseInt(d.nextlevel);
                             console.log(nextlevel);
 //                            if(nextlevel > -1){
@@ -145,15 +145,15 @@ var module = angular.module('MyApp.board.directive', [])
 //                        element.replaceWith($compile( comment_html.join("") )(scope));
                         element.append($compile( comment_html.join("") )(scope));
                     }
-                    var makeCommentHtml = function(nextlevel, idtree, parent, author, content, cdate, likecnt, hatecnt){
-                        return ' <div class="media"> '+
-                            ' <a href="#" class="pull-left"> '+
-                            '     <img alt="" src="/static/assets/admin/layout2/img/avatar2.jpg" class="media-object"> '+
-                            '     </a> '+
-                            '     <div class="media-body"> '+
-                            '     <h4 class="media-heading">'+ (nextlevel + '-' +idtree + '-' +parent) +' <span> '+cdate+' / <a href="#">Reply </a> </span> '+
-                            '     </h4> '+
-                            '     <p> '+ content + ' </p> ';
+                    var makeCommentHtml = function(nextlevel, idtree, parent, author, content, cdate, likecnt, hatecnt, id){
+                        return '<div class="media" id="_comment_'+id+'"> '+
+                            '<a href="#" class="pull-left"> '+
+                            '<img alt="" src="/static/assets/admin/layout2/img/avatar2.jpg" class="media-object"> '+
+                            '</a> '+
+                            '<div class="media-body"> '+
+                            '<h4 class="media-heading">'+ (nextlevel + '-' +idtree + '-' +parent) +' <span> '+cdate+' / <a href="#" ng-click="post_reply('+id+')">Reply </a>  / <a href="#" ng-click="post_edit('+parent+','+id+','+content+','+author+')">Edit </a> </span> '+
+                            '</h4> '+
+                            '<p> '+ content + ' </p> ';
                     }
 
 //                    var html = render(options.data);
@@ -168,6 +168,51 @@ var module = angular.module('MyApp.board.directive', [])
                     });
                 };
            }])
+
+        .directive('ngCommentAdd', ['$compile','$window', function($compile,$window){
+            return function(scope, element, attrs){
+                var options = {};
+                if(attrs.ngCommentAdd.length>0){
+                    options = scope.$eval(attrs.ngCommentAdd);
+                }
+//                    var data = options.data;
+
+                var render = function(data){
+                    console.log('---------ngCommentAdd render ----------' + data );
+                    var comment_html = [];
+                    comment_html.push(makeCommentHtml());
+                    element.append($compile( comment_html.join("") )(scope));
+                }
+                var makeCommentHtml = function(){
+                    return
+                        '<div class="post-comment" id="_post_add__"> '+
+                        '<h3>Leave a Comment</h3> '+
+                        '<form role="form"> '+
+                        '<div class="form-group"> '+
+                        '<label class="control-label">Name <span class="required"> * </span> '+
+                        '</label> '+
+                        '<input type="text" class="form-control" ng-model="comment.author"> '+
+                        '</div> '+
+                        '<div class="form-group"> '+
+                        '<label class="control-label">Message <span class="required"> * </span> '+
+                        '</label> '+
+                        '<textarea class="col-md-10 form-control" rows="8" ng-model="comment.content"></textarea> '+
+                        '</div> '+
+                        '<button class="margin-top-20 btn blue" type="submit" ng-click="post_add()">Post a Comment</button> '+
+                        '</form> '+
+                        '</div>';
+                };
+
+                console.log('---------- ngCommentAdd result html is ------------');
+                console.log(options.data);
+                scope.$watch(function(){
+                    console.log('------ ngCommentAdd watch options.data...... ');
+                    return JSON.stringify(options.data);
+                }, function(value){
+                    render(options.data);
+                });
+            };
+        }])
 
         .directive('ngConfirmClick', [
             function(){
