@@ -287,3 +287,38 @@ update board set categories_id = 1 where categories_id is null;
 delete from comments p  where p.board_id = 131042 and p.id = 99 and not exists (select 'e' from comments c where p.id = c.parent );
 
 select * from comments p where board_id = 131042;
+
+insert into comments(board_id, id, parent, content,author) select 65537, max(id), 0, 'test', 'test'  from comments;
+
+
+select * from comments where board_id = 65537;
+
+select
+  board_id, id, idtree, parent, content, author, cdate, likecnt, hatecnt,
+  coalesce(level- lag(level,1) over (order by seq),0) as prevlevel,
+  coalesce(level-lead(level,1) over (order by seq),0) as nextlevel
+from (
+       SELECT
+         ((q.h).node).board_id as board_id,
+         row_number() over() as seq,
+         ((q.h).node).id,
+         repeat(' ', (q.h).level) || ((q.h).node).id AS idtree,
+         ((q.h).node).parent,
+         ((q.h).node).author,
+         ((q.h).node).cdate,
+         ((q.h).node).likecnt,
+         ((q.h).node).hatecnt,
+         ((q.h).node).content,
+         (q.h).level,
+         h
+       FROM (
+              SELECT
+                fn_hierarchy_connnect_by(min(parent), 1, min(board_id)) AS h
+              FROM comments
+              WHERE board_id = 65537
+            ) AS q
+     ) a
+;
+
+
+

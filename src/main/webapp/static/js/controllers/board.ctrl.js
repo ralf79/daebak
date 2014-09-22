@@ -2,19 +2,7 @@
  * Created by system on 2014. 9. 9..
  */
 angular.module('MyApp.board.ctrl',[])
-    .controller('ModalInstanceCtrl', function($scope, $modalInstance, data){
-        $scope.editedItem = data.editedItem;
-        $scope.save = function(){
-            $modalInstance.close($scope.editedItem);
-        };
-        $scope.cancel = function(){
-            $modalInstance.dismiss('cancel');
-        }; // end of cancel
-        $scope.delete = function(){
-            $scope.editedItem.modalcmd = 'delete';
-            $modalInstance.close($scope.editedItem);
-        }
-    })
+
     .controller('BoardEditCtrl', ['$location', '$scope', '$modal','$fileService', '$boardService','$routeParams', function($location, $scope, $modal, $fileService, $boardService, $routeParams) {
         console.log('BaordEditCtrl.....');
         $scope.editedItem = {};
@@ -142,7 +130,7 @@ angular.module('MyApp.board.ctrl',[])
         $scope.board.commentsOption = {};
         $scope.$routeParams = $routeParams;
         $scope.board.id = $routeParams.id;
-
+        $scope.editedItem = {};
         $scope.commentAddOptions = {};
 
         console.log('$scope.detail : ' + $scope.board.id);
@@ -191,22 +179,22 @@ angular.module('MyApp.board.ctrl',[])
         };
 
         $scope.showpostinsert = true;
-        $scope.comment = {};
-        $scope.comment.board_id = $scope.board.id;
+        $scope.editedItem.comment = {};
+        $scope.editedItem.comment.board_id = $scope.board.id;
 //        $scope.post_add = function(parent){
 //
 //        };
 
         $scope.post_edit = function(parent, id, content, author){
-            $scope.comment.id = id;
-            $scope.comment.content = content;
-            $scope.comment.author = author;
+            $scope.editedItem.comment.id = id;
+            $scope.editedItem.comment.content = content;
+            $scope.editedItem.comment.author = author;
 //            $scope.commentAddOptionsforEdit.data = {'status':'1'};
             $('#_comment_'+id).replaceWith('<div class="post-comment" ng-comment-add="commentAddOptions">');
         };
 
         $scope.post_save = function(parent, id){
-            var q = $scope.comment;
+            var q = $scope.editedItem.comment;
             if(!angular.isDefined(parent)){
                 q.parent = 0
             }else{
@@ -222,6 +210,9 @@ angular.module('MyApp.board.ctrl',[])
             pp.then(function(data){
                 if(data.success = '200'){
                     $scope.board.commentsOption.data = data.comments;
+                    $scope.editedItem.comment.content = '';
+                    $scope.editedItem.comment.author = '';
+                    $scope.editedItem.comment.id = 0;
                 }
             });
         };
@@ -233,7 +224,7 @@ angular.module('MyApp.board.ctrl',[])
             pp.then(function(data){
                 if(data.success = '200'){
                     $scope.board.commentsOption.data = data.comments;
-                    $scope.comment = {};
+                    $scope.editedItem.comment = {};
                 }
             });
         };
@@ -244,8 +235,8 @@ angular.module('MyApp.board.ctrl',[])
                 $('#_comment_'+id).after('<div class="post-comment" ng-comment-add="commentAddOptions">');
             }
         }
-
     }])
+
     .controller('BoardListCtrl', ['$location', '$scope', '$modal', '$boardService', function($location, $scope, $modal, $boardService) {
         $scope.current_path = '#' + $location.url();
         $scope.editedItem = {};

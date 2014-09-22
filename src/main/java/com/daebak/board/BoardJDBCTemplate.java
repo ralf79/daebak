@@ -74,11 +74,12 @@ public class BoardJDBCTemplate implements BoardDAO {
     public List<Comments> listComment(Integer board_id) {
         String SQL =
                "select\n" +
-               "  id, idtree, parent, content, author, cdate, likecnt, hatecnt,\n" +
+               "  board_id, id, idtree, parent, content, author, cdate, likecnt, hatecnt,\n" +
                "  coalesce(level- lag(level,1) over (order by seq),0) as prevlevel,\n" +
                "  coalesce(level-lead(level,1) over (order by seq),0) as nextlevel \n" +
                "  from (\n" +
                "    SELECT\n" +
+               "      ((q.h).node).board_id as board_id,\n"+
                "      row_number() over() as seq,\n" +
                "      ((q.h).node).id,\n" +
                "      repeat(' ', (q.h).level) || ((q.h).node).id AS idtree,\n" +
@@ -187,7 +188,13 @@ public class BoardJDBCTemplate implements BoardDAO {
 
     @Override
     public void createComment(Comments vo) {
-        String SQL = "insert into comments(board_id, id, parent, content,author) select ?, max(id), ?, ?, ?  from comments ; ";
+        String SQL = "insert into comments(board_id, id, parent, content,author) select ?, max(id)+1, ?, ?, ?  from comments ";
+        log.info("create Comment vo is ----");
+        log.info(""+vo.getBoard_id());
+        log.info(""+vo.getParent());
+        log.info(vo.getContent());
+        log.info(vo.getAuthor());
+
         jdbcTemplateObject.update(SQL, vo.getBoard_id(), vo.getParent(), vo.getContent(), vo.getAuthor()  );
         log.info("createComment created Record = " + vo);
         return;

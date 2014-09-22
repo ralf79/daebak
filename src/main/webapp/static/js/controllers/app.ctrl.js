@@ -6,7 +6,20 @@ angular.module('MyApp.ctrl',[])
     .controller('AppCtrl', ['$location', '$scope', function($location, $scope) {
         $scope.current_path = '#' + $location.url();
     }])
+    .controller('ModalInstanceCtrl', function($scope, $modalInstance, items){
+        $scope.items = items;
+        $scope.selected = {
+            item: $scope.items[0]
+        };
 
+        $scope.ok = function () {
+            $modalInstance.close($scope.selected.item);
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+    })
     .controller('UserCtrl', ['$location', '$scope','$routeParams','$appUser', '$Base64',
         function($location, $scope, $routeParams, $user, $Base64){
             console.log('UserCtrl started....');

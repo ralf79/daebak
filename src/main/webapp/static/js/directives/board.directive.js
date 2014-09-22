@@ -143,7 +143,6 @@ var module = angular.module('MyApp.board.directive', [])
 //                            }
                         }
                         console.log('comment_html is '+ comment_html.join(""));
-//                        element.replaceWith($compile( comment_html.join("") )(scope));
                         element.append($compile( comment_html.join("") )(scope));
                     }
                     var makeCommentHtml = function(nextlevel, idtree, parent, author, content, cdate, likecnt, hatecnt, id){
@@ -152,7 +151,7 @@ var module = angular.module('MyApp.board.directive', [])
                             '<img alt="" src="/static/assets/admin/layout2/img/avatar2.jpg" class="media-object"> '+
                             '</a> '+
                             '<div class="media-body"> '+
-                            '<h4 class="media-heading">'+ (nextlevel + '-' +idtree + '-' +parent) +' <span> '+cdate+' / <a href="#" ng-click="post_reply('+id+')">Reply </a>  / <a href="#" ng-click="post_edit('+parent+','+id+','+content+','+author+')">Edit </a> </span> '+
+                            '<h4 class="media-heading">'+ (nextlevel + '-' +idtree + '-' +parent) +' <span> '+cdate+' / <a href="" ng-click="post_reply('+id+')">Reply </a>  / <a href="" ng-click="post_edit(\''+parent+'\',\''+id+'\',\''+content+'\',\''+author+'\')">Edit </a></span> '+
                             '</h4> '+
                             '<p> '+ content + ' </p> ';
                     }
@@ -162,7 +161,7 @@ var module = angular.module('MyApp.board.directive', [])
                     console.log(options.data);
                     scope.$watch(function(){
                         console.log('------ ngComments watch options.data...... ');
-//                        console.log(JSON.stringify(options.data));
+                        console.log(JSON.stringify(options.data));
                         return JSON.stringify(options.data);
                     }, function(value){
                         render(options.data);
@@ -181,7 +180,7 @@ var module = angular.module('MyApp.board.directive', [])
                     console.log('---------ngCommentAdd render ----------' );
                     console.log(_html_);
                     console.log('---------ngCommentAdd render ----------' );
-                    element.append($compile( _html_ )(scope));
+                    element.replaceWith($compile( _html_ )(scope));
                 }
                 var makeCommentHtml = function(){
                     return '<div class="post-comment" id="_post_add__"> '+
@@ -190,12 +189,12 @@ var module = angular.module('MyApp.board.directive', [])
                         '<div class="form-group"> '+
                         '<label class="control-label">Name <span class="required"> * </span> '+
                         '</label> '+
-                        '<input type="text" class="form-control" ng-model="comment.author"> '+
+                        '<input type="text" class="form-control" ng-model="editedItem.comment.author"> '+
                         '</div> '+
                         '<div class="form-group"> '+
                         '<label class="control-label">Message <span class="required"> * </span> '+
                         '</label> '+
-                        '<textarea class="col-md-10 form-control" rows="8" ng-model="comment.content"></textarea> '+
+                        '<textarea class="col-md-10 form-control" rows="8" ng-model="editedItem.comment.content"></textarea> '+
                         '</div> '+
                         '<button class="margin-top-20 btn blue" type="submit" ng-click="post_save()">Post a Comment</button> '+
 //                        '</form> '+
