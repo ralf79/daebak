@@ -130,6 +130,7 @@ var module = angular.module('MyApp.board.directive', [])
 //                    var data = options.data;
 
                     var render = function(data){
+                        element.empty();
                         console.log('---------ngComments render ----------' + data );
                         var comment_html = [];
                         for(var k=0;data && k<data.length;k++){
@@ -175,19 +176,17 @@ var module = angular.module('MyApp.board.directive', [])
                 if(attrs.ngCommentAdd.length>0){
                     options = scope.$eval(attrs.ngCommentAdd);
                 }
-//                    var data = options.data;
-
-                var render = function(data){
-                    console.log('---------ngCommentAdd render ----------' + data );
-                    var comment_html = [];
-                    comment_html.push(makeCommentHtml());
-                    element.append($compile( comment_html.join("") )(scope));
+                var render = function(){
+                    var _html_ = makeCommentHtml();
+                    console.log('---------ngCommentAdd render ----------' );
+                    console.log(_html_);
+                    console.log('---------ngCommentAdd render ----------' );
+                    element.append($compile( _html_ )(scope));
                 }
                 var makeCommentHtml = function(){
-                    return
-                        '<div class="post-comment" id="_post_add__"> '+
+                    return '<div class="post-comment" id="_post_add__"> '+
                         '<h3>Leave a Comment</h3> '+
-                        '<form role="form"> '+
+//                        '<form role="form"> '+
                         '<div class="form-group"> '+
                         '<label class="control-label">Name <span class="required"> * </span> '+
                         '</label> '+
@@ -198,19 +197,12 @@ var module = angular.module('MyApp.board.directive', [])
                         '</label> '+
                         '<textarea class="col-md-10 form-control" rows="8" ng-model="comment.content"></textarea> '+
                         '</div> '+
-                        '<button class="margin-top-20 btn blue" type="submit" ng-click="post_add()">Post a Comment</button> '+
-                        '</form> '+
+                        '<button class="margin-top-20 btn blue" type="submit" ng-click="post_save()">Post a Comment</button> '+
+//                        '</form> '+
                         '</div>';
                 };
 
-                console.log('---------- ngCommentAdd result html is ------------');
-                console.log(options.data);
-                scope.$watch(function(){
-                    console.log('------ ngCommentAdd watch options.data...... ');
-                    return JSON.stringify(options.data);
-                }, function(value){
-                    render(options.data);
-                });
+                render();
             };
         }])
 

@@ -143,6 +143,8 @@ angular.module('MyApp.board.ctrl',[])
         $scope.$routeParams = $routeParams;
         $scope.board.id = $routeParams.id;
 
+        $scope.commentAddOptions = {};
+
         console.log('$scope.detail : ' + $scope.board.id);
         var pp = $boardService.view([],'/'+$scope.board.id);
 
@@ -191,14 +193,15 @@ angular.module('MyApp.board.ctrl',[])
         $scope.showpostinsert = true;
         $scope.comment = {};
         $scope.comment.board_id = $scope.board.id;
-        $scope.post_add = function(parent){
+//        $scope.post_add = function(parent){
+//
+//        };
 
-        };
         $scope.post_edit = function(parent, id, content, author){
             $scope.comment.id = id;
             $scope.comment.content = content;
             $scope.comment.author = author;
-//            $scope.comment.parent = parent;
+//            $scope.commentAddOptionsforEdit.data = {'status':'1'};
             $('#_comment_'+id).replaceWith('<div class="post-comment" ng-comment-add="commentAddOptions">');
         };
 
@@ -215,13 +218,10 @@ angular.module('MyApp.board.ctrl',[])
                 q.id = id;
             }
 
-            var pp = $commnetService.add(q,'');
+            var pp = $commentService.add(q,'');
             pp.then(function(data){
                 if(data.success = '200'){
                     $scope.board.commentsOption.data = data.comments;
-                    if(q.id != 0){
-                        $('#_comment_'+id).replaceWith('<div ng-comments="board.commentsOption"></div>');
-                    }
                 }
             });
         };
@@ -229,7 +229,7 @@ angular.module('MyApp.board.ctrl',[])
         $scope.post_delete = function(id){
             var q = $scope.comment;
             q.id = id;
-            var pp = $commnetService.edit(q,'');
+            var pp = $commentService.edit(q,'');
             pp.then(function(data){
                 if(data.success = '200'){
                     $scope.board.commentsOption.data = data.comments;
@@ -240,6 +240,7 @@ angular.module('MyApp.board.ctrl',[])
         $scope.post_reply = function(id){
             var nextid = $('#_comment_'+id).next().attr('id');
             if(nextid != '_post_add__'){
+//                $scope.commentAddOptionsforReply.data = {'status':'1'};
                 $('#_comment_'+id).after('<div class="post-comment" ng-comment-add="commentAddOptions">');
             }
         }
