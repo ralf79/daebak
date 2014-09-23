@@ -70,7 +70,7 @@ angular.module('MyApp.board.ctrl',[])
 
     }])
     .controller('BoardAddCtrl', ['$location', '$scope', '$modal','$fileService', '$boardService','$routeParams', function($location, $scope, $modal, $fileService, $boardService, $routeParams) {
-        console.log('BaordWriteCtrl.....');
+        console.log('BoardAddCtrl.....');
         $scope.editedItem = {};
         $scope.editedItem.title = '';
         $scope.board_id = 1;
@@ -175,6 +175,12 @@ angular.module('MyApp.board.ctrl',[])
             console.log('$scope.list');
             // authority check
             $location.path('/board/list');
+
+        };
+        $scope.add = function(){
+            console.log('$scope.add');
+            // authority check
+            $location.path('/board/add');
 
         };
 
