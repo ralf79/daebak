@@ -146,14 +146,14 @@ var module = angular.module('MyApp.board.directive', [])
                         element.append($compile( comment_html.join("") )(scope));
                     }
                     var makeCommentHtml = function(nextlevel, idtree, parent, author, content, cdate, likecnt, hatecnt, id){
-                        return '<div class="media" id="_comment_'+id+'"> '+
+                        return '<div class="media"> '+
                             '<a href="#" class="pull-left"> '+
                             '<img alt="" src="/static/assets/admin/layout2/img/avatar2.jpg" class="media-object"> '+
                             '</a> '+
                             '<div class="media-body"> '+
                             '<h4 class="media-heading">'+ (nextlevel + '-' +idtree + '-' +parent) +' <span> '+cdate+' / <a href="" ng-click="post_reply('+id+')">Reply </a>  / <a href="" ng-click="post_edit(\''+parent+'\',\''+id+'\',\''+content+'\',\''+author+'\')">Edit </a></span> '+
                             '</h4> '+
-                            '<p> '+ content + ' </p> ';
+                            '<div id="_comment_'+id+'" ><p> '+ content + ' </p></div>';
                     }
 
 //                    var html = render(options.data);
@@ -171,10 +171,6 @@ var module = angular.module('MyApp.board.directive', [])
 
         .directive('ngCommentAdd', ['$compile','$window', function($compile,$window){
             return function(scope, element, attrs){
-                var options = {};
-                if(attrs.ngCommentAdd.length>0){
-                    options = scope.$eval(attrs.ngCommentAdd);
-                }
                 var render = function(){
                     var _html_ = makeCommentHtml();
                     console.log('---------ngCommentAdd render ----------' );
@@ -183,28 +179,37 @@ var module = angular.module('MyApp.board.directive', [])
                     element.replaceWith($compile( _html_ )(scope));
                 }
                 var makeCommentHtml = function(){
+                    // return  '<textarea class="col-md-10 form-control" rows="8" ng-model="editedItem.comment.content"></textarea><button class="margin-top-20 btn blue" type="submit" ng-click="post_save()">Post a Comment</button>'
                     return '<div class="post-comment" id="_post_add__"> '+
                         '<h3>Leave a Comment</h3> '+
-//                        '<form role="form"> '+
-                        '<div class="form-group"> '+
-                        '<label class="control-label">Name <span class="required"> * </span> '+
-                        '</label> '+
-                        '<input type="text" class="form-control" ng-model="editedItem.comment.author"> '+
-                        '</div> '+
                         '<div class="form-group"> '+
                         '<label class="control-label">Message <span class="required"> * </span> '+
                         '</label> '+
-                        '<textarea class="col-md-10 form-control" rows="8" ng-model="editedItem.comment.content"></textarea> '+
+                        '<textarea class="col-md-10 form-control" rows="8" ng-model="addedItem.comment.content"></textarea> '+
                         '</div> '+
                         '<button class="margin-top-20 btn blue" type="submit" ng-click="post_save()">Post a Comment</button> '+
-//                        '</form> '+
                         '</div>';
                 };
 
                 render();
             };
         }])
+        .directive('ngCommentEdit', ['$compile','$window', function($compile,$window){
+            return function(scope, element, attrs){
 
+                var render = function(){
+                    var _html_ = makeCommentHtml();
+                    console.log('---------ngCommentEdit render ----------' );
+                    console.log(_html_);
+                    console.log('---------ngCommentEdit render ----------' );
+                    element.replaceWith($compile( _html_ )(scope));
+                }
+                var makeCommentHtml = function(){
+                    return  '<textarea class="col-md-10 form-control" rows="8" ng-model="editedItem.comment.content"></textarea><button class="margin-top-20 btn blue" type="submit" ng-click="post_save()">Post a Comment</button>'
+                };
+                render();
+            };
+        }])
         .directive('ngConfirmClick', [
             function(){
                 return {

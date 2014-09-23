@@ -181,16 +181,17 @@ angular.module('MyApp.board.ctrl',[])
         $scope.showpostinsert = true;
         $scope.editedItem.comment = {};
         $scope.editedItem.comment.board_id = $scope.board.id;
-//        $scope.post_add = function(parent){
-//
-//        };
+        $scope.editedItem.comment.author = "Test";
+
+        $scope.addedItem = {};
+        $scope.addedItem.comment = {};
+        $scope.addedItem.comment.board_id = $scope.board.id;
+        $scope.addedItem.comment.author = "Test";
 
         $scope.post_edit = function(parent, id, content, author){
             $scope.editedItem.comment.id = id;
             $scope.editedItem.comment.content = content;
-            $scope.editedItem.comment.author = author;
-//            $scope.commentAddOptionsforEdit.data = {'status':'1'};
-            $('#_comment_'+id).replaceWith('<div class="post-comment" ng-comment-add="commentAddOptions">');
+            $('#_comment_'+id).replaceWith('<div><textarea class="col-md-10 form-control" rows="8" ng-model="editedItem.comment.content"></textarea><button class="margin-top-20 btn blue" type="submit" ng-click="post_save()">Post a Comment</button></div>');
         };
 
         $scope.post_save = function(parent, id){
@@ -211,7 +212,6 @@ angular.module('MyApp.board.ctrl',[])
                 if(data.success = '200'){
                     $scope.board.commentsOption.data = data.comments;
                     $scope.editedItem.comment.content = '';
-                    $scope.editedItem.comment.author = '';
                     $scope.editedItem.comment.id = 0;
                 }
             });
@@ -231,8 +231,7 @@ angular.module('MyApp.board.ctrl',[])
         $scope.post_reply = function(id){
             var nextid = $('#_comment_'+id).next().attr('id');
             if(nextid != '_post_add__'){
-//                $scope.commentAddOptionsforReply.data = {'status':'1'};
-                $('#_comment_'+id).after('<div class="post-comment" ng-comment-add="commentAddOptions">');
+                $('#_comment_'+id).after('<div><textarea class="col-md-10 form-control" rows="8" ng-model="editedItem.comment.content"></textarea><button class="margin-top-20 btn blue" type="submit" ng-click="post_save()">Post a Comment</button></div>');
             }
         }
     }])
