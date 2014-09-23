@@ -185,7 +185,7 @@ var module = angular.module('MyApp.board.directive', [])
                         '<div class="form-group"> '+
                         '<label class="control-label">Message <span class="required"> * </span> '+
                         '</label> '+
-                        '<textarea class="col-md-10 form-control" rows="8" ng-model="addedItem.comment.content"></textarea> '+
+                        '<textarea class="col-md-10 form-control" rows="8" ng-model="editedItem.comment.content"></textarea> '+
                         '</div> '+
                         '<button class="margin-top-20 btn blue" type="submit" ng-click="post_save()">Post a Comment</button> '+
                         '</div>';

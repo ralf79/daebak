@@ -124,7 +124,7 @@ angular.module('MyApp.board.ctrl',[])
 
     }])
 
-    .controller('BoardViewCtrl', ['$location', '$scope', '$modal', '$boardService','$commentService','$routeParams', function($location, $scope, $modal, $boardService, $commentService, $routeParams) {
+    .controller('BoardViewCtrl', ['$location', '$scope', '$modal', '$boardService','$commentService','$routeParams','$compile', function($location, $scope, $modal, $boardService, $commentService, $routeParams, $compile) {
         $scope.board={};
         $scope.board_id = 1;
         $scope.board.commentsOption = {};
@@ -183,18 +183,17 @@ angular.module('MyApp.board.ctrl',[])
         $scope.editedItem.comment.board_id = $scope.board.id;
         $scope.editedItem.comment.author = "Test";
 
-        $scope.addedItem = {};
-        $scope.addedItem.comment = {};
-        $scope.addedItem.comment.board_id = $scope.board.id;
-        $scope.addedItem.comment.author = "Test";
 
         $scope.post_edit = function(parent, id, content, author){
             $scope.editedItem.comment.id = id;
             $scope.editedItem.comment.content = content;
-            $('#_comment_'+id).replaceWith('<div><textarea class="col-md-10 form-control" rows="8" ng-model="editedItem.comment.content"></textarea><button class="margin-top-20 btn blue" type="submit" ng-click="post_save()">Post a Comment</button></div>');
+            $('#_comment_'+id).replaceWith(
+                $compile('<div><textarea class="col-md-10 form-control" rows="8" ng-model="editedItem.comment.content"></textarea><button class="margin-top-20 btn blue" type="submit" ng-click="post_save('+parent+', '+id+')">Post a Comment</button></div>')($scope)
+            );
         };
 
         $scope.post_save = function(parent, id){
+
             var q = $scope.editedItem.comment;
             if(!angular.isDefined(parent)){
                 q.parent = 0
@@ -206,15 +205,33 @@ angular.module('MyApp.board.ctrl',[])
             }else{
                 q.id = id;
             }
+            console.log('--- before post_save q is ----' + parent +';' + id);
+            console.log(q);
+            console.log('--- before post_save q is ----');
+//            var pp;
+            if(id > 0){
+                console.log('--- after post_save edit is ----');
+                var pp = $commentService.edit(q,'');
+                pp.then(function(data){
+                    if(data.success = '200'){
+                        $scope.board.commentsOption.data = data.comments;
+                        $scope.editedItem.comment.content = '';
+                        $scope.editedItem.comment.id = 0;
+                    }
+                });
+            }else{
+                console.log('--- after post_save add is ----');
+                var pp = $commentService.add(q,'');
+                pp.then(function(data){
+                    if(data.success = '200'){
+                        $scope.board.commentsOption.data = data.comments;
+                        $scope.editedItem.comment.content = '';
+                        $scope.editedItem.comment.id = 0;
+                    }
+                });
+            }
 
-            var pp = $commentService.add(q,'');
-            pp.then(function(data){
-                if(data.success = '200'){
-                    $scope.board.commentsOption.data = data.comments;
-                    $scope.editedItem.comment.content = '';
-                    $scope.editedItem.comment.id = 0;
-                }
-            });
+
         };
 
         $scope.post_delete = function(id){
@@ -231,7 +248,10 @@ angular.module('MyApp.board.ctrl',[])
         $scope.post_reply = function(id){
             var nextid = $('#_comment_'+id).next().attr('id');
             if(nextid != '_post_add__'){
-                $('#_comment_'+id).after('<div><textarea class="col-md-10 form-control" rows="8" ng-model="editedItem.comment.content"></textarea><button class="margin-top-20 btn blue" type="submit" ng-click="post_save()">Post a Comment</button></div>');
+                $('#_comment_'+id).after(
+                    $compile('<div><textarea class="col-md-10 form-control" rows="8" ng-model="editedItem.comment.content"></textarea><button class="margin-top-20 btn blue" type="submit" ng-click="post_save('+id+')">Post a Comment</button></div>')($scope)
+                );
+
             }
         }
     }])
